@@ -7,6 +7,7 @@ const peers = process.env.PEERS ? process.env.PEERS.split(',') : []; // se esist
 
 
 class P2pServer {
+
     constructor(blockchain){
         this.blockchain = blockchain;
         this.sockets = [];
@@ -24,18 +25,31 @@ class P2pServer {
     connectSocket(socket) {
         this.sockets.push(socket);
         console.log('Socket connected');
+
+        this.messageHandler(socket); //riceve la blockchain dal nuovo socket connesso
+
+        socket.send(JSON.stringify(this.blockchain.chain)); //invia la blockchain al nuovo socket connesso
     }
 
     connectToPeers() {
         peers.forEach( peer => {
             // ws://localhost:5001
 
-            const socket = new Websocket(peer);
+            const socket = new Websocket(peer); //viene richiesto di aprire il socket
 
+            socket.on('error',() => console.log('errore connesione '+ peer));
             socket.on('open', () => this.connectSocket(socket));
 
         });
     }
+
+    messageHandler(socket) {
+        socket.on('message', message => {
+            const data = JSON.parse(message);
+            console.log('data', data);
+        });
+    }
+
 }
 
 module.exports = P2pServer;
