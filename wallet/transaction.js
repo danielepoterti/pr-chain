@@ -20,18 +20,26 @@ class Transaction{
             { amount, address: recipient }
           ]);
       
-        Transaction.signTrasction(transaction, senderWallet);
-        
+        Transaction.signTransction(transaction, senderWallet);
+
         return transaction;
     }
 
-    static signTrasction(transaction, senderWallet){
+    static signTransction(transaction, senderWallet){
         transaction.input = {
             timestamp: Date.now(),
             amount: senderWallet.balance,
             address: senderWallet.publicKey,
             signature: senderWallet.sign(ChainUtil.hash(transaction.outputs))
         }
+    }
+
+    static verifyTransaction(transaction) {
+        return ChainUtil.verifySignature(
+            transaction.input.address,
+            transaction.input.signature,
+            ChainUtil.hash(transaction.outputs)
+        )
     }
 }
 
