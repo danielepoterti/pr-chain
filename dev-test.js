@@ -1,17 +1,8 @@
-const Block	=	require('./block');
+const Blockchain = require('./blockchain');
 
-runBlockchain(3);
+const bc = new Blockchain();
 
-function runBlockchain(numRipetizioni)
-{
-	const genesisBlock	=	Block.mineBlock(Block.genesis(), 'genesisBlock');
-	console.log(genesisBlock.toString());
-
-	var nBlock	=	genesisBlock;
-
-	for (var i = 0;	i < numRipetizioni;	i++)
-	{
-		nBlock	=	Block.mineBlock(nBlock, i);
-		console.log(nBlock.toString());
-	}
+for (let i = 0; i < 10; i++) {
+	console.log(bc.addBlock(`foo ${i}`).toString());
 }
+

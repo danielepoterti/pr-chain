@@ -48,7 +48,7 @@ class Block {
         }
  
 
-        static hash(timestamp, lastHash, data, nonce) {
+        static hash(timestamp, lastHash, data, nonce, difficulty) {
             return SHA256(`${timestamp}${lastHash}${data}${nonce}${difficulty}`).toString();
         }
 
