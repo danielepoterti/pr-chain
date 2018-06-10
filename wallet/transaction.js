@@ -7,6 +7,24 @@ class Transaction{
         this.outputs = [];
     }
 
+    update(senderWallet, recipient, amount) {
+        const senderOutput = this.outputs.find(output => output.address === senderWallet.publicKey); //restituisce un puntatore all'oggetto output del sender
+    
+      if (amount > senderOutput.amount) {
+        console.log(`Amount: ${amount} exceeds balance.`);
+        return;
+      }
+    
+      senderOutput.amount = senderOutput.amount - amount;
+      this.outputs.push({ amount, address: recipient });
+      Transaction.signTransaction(this, senderWallet);
+
+     /* console.log (senderOutput);
+      console.log (this.outputs[0]); */
+    
+      return this;
+    }    
+
     static newTransaction(senderWallet, recipient, amount) {
         const transaction = new this();
 
@@ -20,12 +38,12 @@ class Transaction{
             { amount, address: recipient }
           ]);
       
-        Transaction.signTransction(transaction, senderWallet);
+        Transaction.signTransaction(transaction, senderWallet);
 
         return transaction;
     }
 
-    static signTransction(transaction, senderWallet){
+    static signTransaction(transaction, senderWallet){
         transaction.input = {
             timestamp: Date.now(),
             amount: senderWallet.balance,
