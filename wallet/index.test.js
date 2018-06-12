@@ -70,7 +70,7 @@ describe('Wallet', () =>{
                 subtractBalance = 60
                 recipientBalance = wallet.calculateBalance(bc);
                 wallet.createTransaction(senderWallet.publicKey, subtractBalance, bc, tp);
-                bc.addBlock(tp.transaction);
+                bc.addBlock(tp.transactions);
             });
 
             describe('and the sender sends another transaction to the recipient', () =>{
