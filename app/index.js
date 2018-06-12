@@ -24,9 +24,6 @@ app.use(cors());
 app.get('/blocks', (req, res) => {
 
     res.json(bc.chain);
-
-    
-
 });
 
 app.post('/mine', (req, res) =>{
@@ -60,7 +57,11 @@ app.get('/mine-transactions', (req, res) => {
     const block = miner.mine();
     console.log(`New block added: ${block.toString()}`);
     res.redirect('/blocks');
-})
+});
+
+app.get('/balance', (req, res) => {
+    res.json({blance: wallet.calculateBalance(bc)});
+});
 
 app.listen(HTTP_PORT, () => console.log(`Listening on port ${HTTP_PORT}`));
 p2pServer.listen();
