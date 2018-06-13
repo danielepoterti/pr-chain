@@ -71,7 +71,7 @@ app.get('/mine-transactions', (req, res) => {
 });
 
 app.get('/balance', (req, res) => {
-    res.json({blance: wallet.calculateBalance(bc)});
+    res.json({balance: wallet.calculateBalance(bc)});
 });
 
 
