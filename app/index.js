@@ -45,12 +45,18 @@ app.post('/transact', (req, res) =>{
 
     //console.log(req);
     const {recipient, amount} = req.body;
-    console.log(recipient);
-    console.log(amount);
+    //console.log(recipient);
+   // console.log(amount);
 
     const transaction = wallet.createTransaction(recipient, amount, bc, tp);
-    p2pServer.broadcastTransaction(transaction);
-    res.redirect('/transactions');
+    if(transaction)
+    {
+        p2pServer.broadcastTransaction(transaction);
+        res.redirect('/transactions');
+    } else{
+        const warning = "WARN: Saldo non sufficente. OPERAZIONE ANNULLATA"
+        res.json(warning);
+    }
 });
 
 app.get('/public-key', (req, res) => {
@@ -67,6 +73,7 @@ app.get('/mine-transactions', (req, res) => {
 app.get('/balance', (req, res) => {
     res.json({blance: wallet.calculateBalance(bc)});
 });
+
 
 app.listen(HTTP_PORT, () => console.log(`Listening on port ${HTTP_PORT}`));
 p2pServer.listen();
