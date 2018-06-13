@@ -26,14 +26,15 @@ app.get('/blocks', (req, res) => {
     res.json(bc.chain);
 });
 
-app.post('/mine', (req, res) =>{
-    const block = bc.addBlock(req.body.data);
-    console.log(`New block added: ${block.toString()}`);
+// debug
+// app.post('/mine', (req, res) =>{
+//     const block = bc.addBlock(req.body.data);
+//     console.log(`New block added: ${block.toString()}`);
 
-    p2pServer.syncChains();
+//     p2pServer.syncChains();
 
-    res.redirect('/blocks');
-});
+//     res.redirect('/blocks');
+// });
 
 app.get('/transactions', (req, res) => {
 
@@ -42,7 +43,11 @@ app.get('/transactions', (req, res) => {
 
 app.post('/transact', (req, res) =>{
 
+    //console.log(req);
     const {recipient, amount} = req.body;
+    console.log(recipient);
+    console.log(amount);
+
     const transaction = wallet.createTransaction(recipient, amount, bc, tp);
     p2pServer.broadcastTransaction(transaction);
     res.redirect('/transactions');
